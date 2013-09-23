@@ -26,6 +26,12 @@ flaskmac
 *.db
 db_repository
 
+# pycharm
+.idea/
+
+#tmp directory
+tmp
+
 # Installer logs
 pip-log.txt
 
