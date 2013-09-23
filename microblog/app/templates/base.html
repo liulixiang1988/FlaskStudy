@@ -11,6 +11,7 @@
 <body>
     <div>微博：<a href="{{url_for('index')}}">首页</a>
     {% if g.user.is_authenticated() %}
+    |<a href="{{url_for('user', nickname=g.user.nickname)}}">{{g.user.nickname}}</a>
     |<a href="{{ url_for('logout') }}">退出</a>
     {% endif %}
     </div>

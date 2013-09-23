@@ -74,7 +74,30 @@ def after_login(resp):
     login_user(user, remember=remember_me)
     return redirect(request.args.get('next') or url_for('index'))
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/user/<nickname>')
+@login_required
+def user(nickname):
+    """
+
+    :param nickname:
+    :return:
+    """
+    user = User.query.filter_by(nickname=nickname).first()
+    if user is None:
+        flash(u'没有找到' + nickname)
+        return redirect(url_for('index'))
+    posts = [
+        {'author': user, 'body': u'好好奋斗！为老婆创造更好的生活！'},
+        {'author': user, 'body': u'你必须很努力，才能看起来毫不费力！'}
+    ]
+    return render_template('user.html',
+                           title=u'用户' + nickname,
+                           user=user,
+                           posts=posts)
