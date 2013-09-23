@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 __author__ = 'liulixiang'
 
+from hashlib import md5
 from app import db
 
 ROLE_USER = 0
@@ -28,6 +29,14 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.nickname
+
+    def avatar(self, size):
+        """
+        返回头像头片的链接地址
+        :param size: 头像尺寸
+        :return: 返回头像的链接
+        """
+        return 'http://www.gravatar.com/avatar/' + md5(self.email).hexdigest()+'?d=mm&s='+str(size)
 
 
 class Post(db.Model):
