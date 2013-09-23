@@ -18,6 +18,14 @@ develop-eggs
 lib
 lib64
 
+# Virtual Env
+flask
+flaskmac
+
+# db
+*.db
+db_repository
+
 # Installer logs
 pip-log.txt
 
