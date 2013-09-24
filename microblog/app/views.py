@@ -2,20 +2,24 @@
 __author__ = 'Liu Lixiang'
 from flask import render_template, redirect, g, url_for, session, flash, request
 from flask.ext.login import login_user, current_user, login_required, logout_user
+from datetime import datetime
 from app import app, db, login_manager, open_id
 from app.models import User, ROLE_USER
-from .forms import LoginForm
+from .forms import LoginForm, EditForm
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    print user_id
     return User.query.get(int(user_id))
 
 
 @app.before_request
 def before_request():
     g.user = current_user
+    if g.user.is_authenticated():
+        g.user.last_seen = datetime.utcnow()
+        db.session.add(g.user)
+        db.session.commit()
 
 
 @app.route('/')
@@ -101,3 +105,22 @@ def user(nickname):
                            title=u'用户' + nickname,
                            user=user,
                            posts=posts)
+
+
+@app.route('/edit', methods=['GET', 'POST'])
+@login_required
+def edit():
+    form = EditForm()
+    if form.validate_on_submit():
+        g.user.nickname = form.nickname.data
+        g.user.about_me = form.about_me.data
+        db.session.add(g.user)
+        db.session.commit()
+        flash(u'更新已经成功保存！')
+        return redirect(url_for('edit'))
+    else:
+        form.nickname.data = g.user.nickname
+        form.about_me.data = g.user.about_me
+    return render_template('edit.html',
+                           title=u'用户信息更新',
+                           form=form)
