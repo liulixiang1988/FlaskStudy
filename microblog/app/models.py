@@ -38,7 +38,20 @@ class User(db.Model):
         :param size: 头像尺寸
         :return: 返回头像的链接
         """
-        return 'http://www.gravatar.com/avatar/' + md5(self.email).hexdigest()+'?d=mm&s='+str(size)
+        return 'http://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&s=' + str(size)
+
+
+    @staticmethod
+    def make_unique_name(nickname):
+        if User.query.filter_by(nickname=nickname).first() is None:
+            return nickname
+        version = 2
+        while True:
+            new_nickname = nickname + str(version)
+            if User.query.filter_by(nickname=new_nickname).first() is None:
+                break
+            version += 1
+        return new_nickname
 
 
 class Post(db.Model):
