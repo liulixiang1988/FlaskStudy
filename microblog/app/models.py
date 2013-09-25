@@ -63,6 +63,11 @@ class User(db.Model):
             self.followed.remove(user)
             return self
 
+    def followed_posts(self):
+        return Post.query.join(followers, (followers.c.followed_id == Post.user_id)).\
+            filter(followers.c.follower_id == self.id).\
+            order_by(Post.timestamp.desc())
+
     @staticmethod
     def make_unique_name(nickname):
         if User.query.filter_by(nickname=nickname).first() is None:
