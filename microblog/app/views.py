@@ -71,6 +71,9 @@ def after_login(resp):
         user = User(nickname=nickname, email=resp.email, role=ROLE_USER)
         db.session.add(user)
         db.session.commit()
+        #添加自己为关注者
+        db.session.add(user.follow(user))
+        db.session.commit()
     remember_me = False
     if 'remeber_me' in session:
         remember_me = session['remember_me']
