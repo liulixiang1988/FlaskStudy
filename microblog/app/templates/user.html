@@ -7,7 +7,15 @@
                     <h1>用户：{{user.nickname}}</h1>
                     {% if user.about_me %}<p>{{user.about_me}}</p>{% endif %}
                     {% if user.last_seen %}<p>{{user.last_seen}}</p>{%endif%}
-                    {% if user.id == g.user.id %}<p><a href="{{url_for('edit')}}">编辑</a></p> {%endif%}
+                    <p>{{user.followers.count()}}粉丝|
+                    {% if user.id == g.user.id %}
+                        <a href="{{url_for('edit')}}">编辑</a>
+                    {% elif g.user.is_following(user) %}
+                        <a href="{{url_for('unfollow', nickname=user.nickname)}}">取消关注</a>
+                    {% else %}
+                        <a href="{{url_for('follow', nickname=user.nickname)}}">关注</a>
+                    {%endif%}
+                    </p>
                 </td>
             </tr>
         </table>

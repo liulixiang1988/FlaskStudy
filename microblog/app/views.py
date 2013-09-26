@@ -82,6 +82,44 @@ def after_login(resp):
     return redirect(request.args.get('next') or url_for('index'))
 
 
+@app.route('/follow/<nickname>')
+def follow(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user is None:
+        flash(u'没有找到' + nickname)
+        return redirect(url_for('index'))
+    if user == g.user:
+        flash(u'不能follow自己啊亲')
+        return redirect(url_for('user', nickname=nickname))
+    u = g.user.follow(user)
+    if u is None:
+        flash(u'无法关注' + nickname)
+        return redirect(url_for('user', nickname=nickname))
+    db.session.add(u)
+    db.session.commit()
+    flash(u'关注成功！')
+    return redirect(url_for('user', nickname=nickname))
+
+
+@app.route('/unfollow/<nickname>')
+def unfollow(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user is None:
+        flash(nickname+u'不存在')
+        return redirect(url_for('index'))
+    if user == g.user:
+        flash(u'不能取消对自己的关注')
+        return redirect(url_for('user', nickname=nickname))
+    u = g.user.unfollow(user)
+    if u is None:
+        flash(u'无法取消关注' + nickname)
+        return redirect(url_for('user', nickname=nickname))
+    db.session.add(u)
+    db.session.commit()
+    flash(u'成功取消关注'+nickname)
+    return redirect(url_for('user', nickname=nickname))
+
+
 @app.route('/logout')
 def logout():
     logout_user()
