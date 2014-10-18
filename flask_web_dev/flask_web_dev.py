@@ -32,5 +32,15 @@ from flask import redirect
 def redirect_demo():
     return redirect('http://www.baidu.com')
 
+
+from flask import abort
+
+
+@app.route('/abort_demo/<int:id>')
+def abort_demo(id):
+    if id != 2:
+        abort(404)
+    return '<h1>user id is %s' % id
+
 if __name__ == '__main__':
     app.run(debug=True)
