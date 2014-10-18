@@ -42,5 +42,9 @@ def abort_demo(id):
         abort(404)
     return '<h1>user id is %s' % id
 
+from flask.ext.script import Manager
+
+manager = Manager(app)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    manager.run()
