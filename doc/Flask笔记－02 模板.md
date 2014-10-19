@@ -76,7 +76,7 @@ striptags|在渲染前移除值中的HTML中的tag
 
 ###1.3 控制结构
 
-1. 条件
+1 条件
 
 ```
 {% if user %}
@@ -86,7 +86,7 @@ striptags|在渲染前移除值中的HTML中的tag
 {% endif %}
 ```
 
-2. 循环
+2 循环
 
 ```
 <ul>
@@ -96,7 +96,7 @@ striptags|在渲染前移除值中的HTML中的tag
 </ul>
 ```
 
-3. 宏
+3 宏
 
 类似Python代码，比如
 
@@ -124,7 +124,7 @@ striptags|在渲染前移除值中的HTML中的tag
 </ul>
 ```
 
-4. 导入重复多次的代码
+4 导入重复多次的代码
 
 可以把多次使用的代码段保存到一个单独的文件，然后在需要的地方导入它们。
 
@@ -132,7 +132,7 @@ striptags|在渲染前移除值中的HTML中的tag
 {% include 'common.html' %}
 ```
 
-5. 模板继承
+5 模板继承
 
 创建一个基础模板*base.html*:
 
@@ -223,5 +223,33 @@ bootstrap = Bootstrap(app)
         <h1>Hello, {{ name }}!</h1>
     </div>
 </div>
+{% endblock %}
+```
+
+如果对所有的页面都这样修改就太麻烦了，可以再创建一个继承自`bootstrap/base.html`的模板，其它模板再继承自这个模板.
+
+Flask-Bootstrap还有许多其它预定义的块，如下表：
+
+块名|描述
+---|---
+doc|整个Html文档
+html_attributes|`<html>`标签的属性
+html|`<html>`标签的内容
+head|`<head>`标签的内容
+title|`<title>`标签的内容
+metas|`<meta>`标签列表
+styles|样式表
+body_attributes|`<body>`标签的属性
+body|`<body>`标签的内容
+navbar|用户定义的导航栏
+content|用户定义的内容
+scripts|文件底部的JavaScript文件区域
+
+注意，上表中的许多块Flask-Bootstrap自己也用到了，所以重写它可能会引发一些问题。比如`styles`和`scripts`块包含了一些声明。如果需要添加额外项，请使用Jinja2的`super()`方法：
+
+```
+{% block scripts %}
+{{ super() }}
+<script type="text/javascipt" src="myscript.js"></script>
 {% endblock %}
 ```
