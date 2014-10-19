@@ -41,3 +41,36 @@ def index():
 def user(name):
     return render_template('user.html', name=name)
 ```
+
+###1.2 变量
+
+Jinja2识别任意类型的变量，甚至是一些复杂的类型，比如列表、字典和对象。下面是一些常见的用法
+
+```
+<p>从字典中取值:{{ mydict['key'] }}</p>
+
+<p>从列表中取值：{{ mylist[3] }}</p>
+
+<p>使用一个变量从列表中取值：{{ mylist[myintvar] }}</p>
+
+<p>对象方法返回的值：{{ myobj.somemethod() }}</p>
+```
+
+变量可以使用*过滤器*进行修改，使用`|`调用过滤器，比如下面的例子是让首字母大写：
+
+```
+Hello, {{ name|capitalize }}
+```
+
+下表列出了Jinja2中常见的过滤器：
+
+过滤器|解释
+-----|----
+safe|不对值进行escape
+capitalize|首字母大写
+lower|转换小写
+upper|转换大写
+title|转换每个单词的首字母为大写
+trim|去除前后的空白
+striptags|在渲染前移除值中的HTML中的tag
+
