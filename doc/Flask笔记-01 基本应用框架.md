@@ -1,5 +1,5 @@
 title:Flask笔记－01 基本应用框架
-date:2014-10-18 23:111
+date:2014-10-18 23:11
 category:Python
 tags:Flask, Flask笔记
 author:刘理想
