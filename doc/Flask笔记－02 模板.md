@@ -173,3 +173,55 @@ striptags|在渲染前移除值中的HTML中的tag
 
 ##2. 使用Flask-Bootstrap集成twitter bootstrap
 
+Bootstrap是前端框架，可以直接对模板进行修改来集成进来。但更容易的方法是使用Flask-Bootstrap扩展：
+
+```
+$pip install flask-bootstrap
+```
+
+Flask扩展经常是在应用实例创建时同时创建。下面是一个初始化例子：
+
+```python
+from flask.ext.bootstrap import Bootstrap
+
+#...
+bootstrap = Bootstrap(app)
+```
+
+一旦Flask-Bootstrap被创建，一个包含了所有Bootstrap文件的基础模板就可用了。可以使用Jinja2的模板继承来定义文件结构。比如下面是一个新的*user.html*：
+
+```
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+             data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Flasky</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">首页</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Hello, {{ name }}!</h1>
+    </div>
+</div>
+{% endblock %}
+```
