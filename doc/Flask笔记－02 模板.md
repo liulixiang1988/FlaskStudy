@@ -74,3 +74,55 @@ title|转换每个单词的首字母为大写
 trim|去除前后的空白
 striptags|在渲染前移除值中的HTML中的tag
 
+###1.3 控制结构
+
+1. 条件
+
+```
+{% if user %}
+    Hello, {{ user }}!
+{% else %}
+    Hello, stranger!
+{% endif %}
+```
+
+2. 循环
+
+```
+<ul>
+    {% for comment in comments %}
+        <li>{{ comment }}</li>
+    {% endfor %}
+</ul>
+```
+
+3. 宏
+
+类似Python代码，比如
+
+```
+{% macro render_comment(comment) %}
+    <li>{{ comment }}</li>
+{% endmacro %}
+
+<ul>
+    {% for comment in comments %}
+        {{ render_comment(comment) }}
+    {% endfor %}
+</ul>
+```
+
+为了让宏更有用，可以把它们保存到一个文件里，然后`import`到模板里：
+
+```
+{% import 'macro.html' as macros %}
+
+<ul>
+    {% for comment in comments %}
+        {{ render_comment(comment) }}
+    {% endfor %}
+</ul>
+```
+
+
+
