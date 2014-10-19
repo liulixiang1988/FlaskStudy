@@ -253,3 +253,5 @@ scripts|文件底部的JavaScript文件区域
 <script type="text/javascipt" src="myscript.js"></script>
 {% endblock %}
 ```
+
+##3. 自定义错误页
