@@ -124,5 +124,52 @@ striptags|在渲染前移除值中的HTML中的tag
 </ul>
 ```
 
+4. 导入重复多次的代码
 
+可以把多次使用的代码段保存到一个单独的文件，然后在需要的地方导入它们。
+
+```
+{% include 'common.html' %}
+```
+
+5. 模板继承
+
+创建一个基础模板*base.html*:
+
+```
+<html>
+<head>
+    {% block head %}
+        <title>{% block title %}{% endblock %} - 我的应用</title>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    {% endblock %}
+</body>
+</html>
+```
+
+上面这个模板有3个block，*head*, *title*, *body*，而且，*title*块还在*head*块内。
+
+下面是子模板:
+
+```
+{% extends "base.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style type="text/css"></style>
+{% endblock %}
+
+{% block body %}
+<h1>你好，世界！</h1>
+{% endblock %}
+```
+
+注意，首先要声明继承的文件；第二个需要注意的是如果在保留块内容的基础上增加一些新的内容，可以使用`super()`方法，它是用来保留原来块内容的。
+
+##2. 使用Flask-Bootstrap集成twitter bootstrap
 
