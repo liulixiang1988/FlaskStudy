@@ -3,20 +3,34 @@
 __author__ = 'liulixiang'
 from datetime import datetime
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, session
 from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'akoejanfaejajenoi193y1$ajfeHjiemadeiagnba*kjie'
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
+from flask.ext.wtf import Form
+from wtforms import StringField, SubmitField
+from wtforms.validators import Required
 
-@app.route('/')
+class NameForm(Form):
+    name = StringField(u'你的名字是什么？')
+    submit = SubmitField(u'提交')
+
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template("index.html", current_time = datetime.utcnow())
+    form = NameForm()
+    if form.validate_on_submit():
+        session['name'] = form.name.data
+        form.name.data = ''
+        return redirect(url_for('index'))
+    return render_template("index.html", form=form, name=session.get('name'), current_time = datetime.utcnow())
 
 
 @app.route('/user/<name>')
