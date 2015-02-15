@@ -3,7 +3,7 @@
 __author__ = 'liulixiang'
 from datetime import datetime
 
-from flask import Flask, render_template, redirect, url_for, session
+from flask import Flask, render_template, redirect, url_for, session, flash
 from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
@@ -27,8 +27,10 @@ class NameForm(Form):
 def index():
     form = NameForm()
     if form.validate_on_submit():
+        old_name = session.get('name')
+        if old_name is not None and old_name != form.name.data:
+            flash(u'看来你改名字了~')
         session['name'] = form.name.data
-        form.name.data = ''
         return redirect(url_for('index'))
     return render_template("index.html", form=form, name=session.get('name'), current_time = datetime.utcnow())
 
