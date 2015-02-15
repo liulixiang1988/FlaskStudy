@@ -2,25 +2,55 @@
 # -*- coding:utf-8 -*-
 __author__ = 'liulixiang'
 from datetime import datetime
+import os
 
 from flask import Flask, render_template, redirect, url_for, session, flash
 from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
+from flask.ext.sqlalchemy import SQLAlchemy
+
+
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'akoejanfaejajenoi193y1$ajfeHjiemadeiagnba*kjie'
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
+db = SQLAlchemy(app)
 
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
-from wtforms.validators import Required
+from wtforms.validators import DataRequired
+
 
 class NameForm(Form):
-    name = StringField(u'你的名字是什么？')
+    name = StringField(u'你的名字是什么？', validators=[DataRequired()])
     submit = SubmitField(u'提交')
+
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    users = db.relationship('User', backref='role')
+
+    def __repr__(self):
+        return '<Role %s>' % self.name
+
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, index=True)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+
+    def __repr__(self):
+        return '<User %s>' % self.username
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -32,7 +62,7 @@ def index():
             flash(u'看来你改名字了~')
         session['name'] = form.name.data
         return redirect(url_for('index'))
-    return render_template("index.html", form=form, name=session.get('name'), current_time = datetime.utcnow())
+    return render_template("index.html", form=form, name=session.get('name'), current_time=datetime.utcnow())
 
 
 @app.route('/user/<name>')
@@ -48,6 +78,7 @@ def page_note_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template("500.html"), 500
+
 
 if __name__ == '__main__':
     manager.run()
