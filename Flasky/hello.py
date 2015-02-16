@@ -36,13 +36,22 @@ app.config['FLASKY_MAIL_SUBJECT_PREFIX'] = u'[刘理想]'
 app.config['FLASKY_MAIL_SENDER'] = u'理想<550488300@qq.com>'
 app.config['FLASKY_ADMIN'] = os.environ.get('FLASKY_ADMIN')
 
+from threading import Thread
+
+
+def send_async_mail(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
 
 def send_email(to, subject, template, **kwargs):
     msg = Message(app.config['FLASKY_MAIL_SUBJECT_PREFIX']+subject,
                   sender=app.config['FLASKY_MAIL_SENDER'], recipients=[to])
     msg.body = render_template(template+'.txt', **kwargs)
     msg.html = render_template(template+'.html', **kwargs)
-    mail.send(msg)
+    thr = Thread(target=send_async_mail, args=[app, msg])
+    thr.start()
+    return thr
 
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
