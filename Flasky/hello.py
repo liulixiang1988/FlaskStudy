@@ -53,6 +53,20 @@ class User(db.Model):
         return '<User %s>' % self.username
 
 
+from flask.ext.script import Shell
+
+
+def make_shell_context():
+    return dict(app=app, db=db, User=User, Role=Role)
+
+manager.add_command('shell', Shell(make_context=make_shell_context))
+
+from flask.ext.migrate import Migrate, MigrateCommand
+
+migrate = Migrate(app, db)
+manager.add_command('db', MigrateCommand)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = NameForm()
