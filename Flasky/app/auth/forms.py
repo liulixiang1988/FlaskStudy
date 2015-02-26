@@ -53,3 +53,13 @@ class ResetPasswordForm(Form):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first() is None:
             raise ValidationError(u'该邮箱没有注册过账户')
+
+
+class ChangeEmailRequestForm(Form):
+    email = StringField(u'邮箱', validators=[DataRequired(), Length(1, 64), Email()])
+    password = PasswordField(u'密码', validators=[DataRequired()])
+    submit = SubmitField(u'提交')
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError(u'该邮箱已经被使用')

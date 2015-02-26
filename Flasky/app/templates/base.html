@@ -36,6 +36,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">帐号 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for('auth.change_password') }}">更改密码</a></li>
+                        <li><a href="{{ url_for('auth.change_email_request') }}">更改邮箱</a></li>
                         <li class="divider"></li>
                         <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
                     </ul>

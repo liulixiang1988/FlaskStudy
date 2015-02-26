@@ -1,0 +1,7 @@
+<p>亲爱的{{ user.username }},</p>
+<p>如果你想重置邮箱，请<a href="{{ url_for('auth.change_email', token=token, _external=True) }}">点击这里</a>.</p>
+<p>或者，您也可以将访问下面这个链接:</p>
+<p>{{ url_for('auth.change_email', token=token, _external=True) }}</p>
+<p>如果不是您没有申请重置邮箱，请直接忽略这封邮件。</p>
+<p>Flasky团队</p>
+<p><small>注意: 请不要直接回复本邮件。</small></p>

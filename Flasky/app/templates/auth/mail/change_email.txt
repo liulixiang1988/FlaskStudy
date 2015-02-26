@@ -1,0 +1,11 @@
+亲爱的{{user.username}}
+
+如果你想重置邮箱，请点击下面的链接：
+
+{{url_for('auth.change_email', token=token, _external=True)}}
+
+如果不是您没有申请密码重置，请直接忽略这封邮件。
+
+Flasky团队
+
+注意：请不要回复这封邮件。
