@@ -5,7 +5,7 @@ __author__ = 'liulixiang'
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from . import auth
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, ResetPasswordRequestForm, ResetPasswordForm
 from ..models import User
 from .. import db
 from ..emails import send_email
@@ -98,3 +98,40 @@ def change_password():
         else:
             flash(u'您输入的原有密码不正确。')
     return render_template('auth/change_password.html', form=form)
+
+
+@auth.route('/reset', methods=['GET', 'POST'])
+def password_reset_request():
+    if not current_user.is_anonymous():
+        return redirect(url_for('main.index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            token = user.generate_reset_token()
+            send_email(user.email, u'重设密码', 'auth/mail/reset_password',
+                       user=user,
+                       token=token,
+                       next=request.args.get('next'))
+            flash(u'一封密码重置邮件已经发送到你的邮箱中')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/reset_password.html', form=form)
+
+
+@auth.route('/reset/<token>', methods=['GET', 'POST'])
+def password_reset(token):
+    if not current_user.is_anonymous():
+        return redirect(url_for('main.index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is None:
+            flash(u'不存在对应邮箱的用户')
+            return redirect(url_for('main.index'))
+        if user.reset_password(token, form.password.data):
+            flash(u'成功重置密码。')
+            return redirect(url_for('.login'))
+        else:
+            flash(u'重置密码链接无效，请检查是否过期')
+            return redirect(url_for('main.index'))
+    return render_template('auth/reset_password.html', form=form)
