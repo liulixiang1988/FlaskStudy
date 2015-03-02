@@ -4,6 +4,7 @@ __author__ = 'liulixiang'
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectField, ValidationError
 from wtforms.validators import DataRequired, Length, Email, Regexp
+from flask.ext.pagedown.fields import PageDownField
 from ..models import Role, User
 
 
@@ -48,5 +49,5 @@ class EditProfileAdminForm(Form):
 
 
 class PostForm(Form):
-    body = TextAreaField(u'你心里想的是什么呢', validators=[DataRequired()])
+    body = PageDownField(u'你心里想的是什么呢', validators=[DataRequired()])
     submit = SubmitField(u'保存')
