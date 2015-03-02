@@ -146,6 +146,11 @@ class User(UserMixin, db.Model):
     def password(self, password):
         self.password_hash = generate_password_hash(password)
 
+    @property
+    def followed_posts(self):
+        return Post.query.join(Follow, Follow.followed_id==Post.author_id)\
+            .filter(Follow.follower_id==self.id)
+
     def ping(self):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
