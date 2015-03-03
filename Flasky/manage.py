@@ -4,7 +4,7 @@ __author__ = 'liulixiang'
 import os
 
 from app import create_app, db
-from app.models import User, Role, Permission, Post, Follow
+from app.models import User, Role, Permission, Post, Follow, Comment
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -15,7 +15,7 @@ migrate = Migrate(app, db)
 
 def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role, Permission=Permission,
-                Post=Post, Follow=Follow)
+                Post=Post, Follow=Follow, Comment=Comment)
 
 
 @manager.command

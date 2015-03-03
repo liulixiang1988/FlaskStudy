@@ -51,3 +51,8 @@ class EditProfileAdminForm(Form):
 class PostForm(Form):
     body = PageDownField(u'你心里想的是什么呢', validators=[DataRequired()])
     submit = SubmitField(u'保存')
+
+
+class CommentForm(Form):
+    body = StringField(u'', validators=[DataRequired()])
+    submit = SubmitField(u'提交')
