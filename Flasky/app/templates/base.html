@@ -6,6 +6,7 @@
     {{ super() }}
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon"/>
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon"/>
+    <script src="{{ url_for('static', filename='js/modernizr.custom.2.8.3.js') }}"></script>
 {% endblock %}
 
 {% block styles %}
@@ -14,7 +15,9 @@
 {% endblock %}
 
 {% block scripts %}
-    {{ super() }}
+    <script src="{{ url_for('static',filename='js/jquery-1.11.2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/respond.min.js') }}"></script>
     {{ moment.include_moment() }}
     {{ moment.lang('zh-cn') }}
 {% endblock %}
