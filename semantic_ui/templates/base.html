@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% include '_includes/head.html' %}
+</head>
+<body>
+    {% include '_includes/header.html' %}
+    {% block content %}{% endblock %}
+    {% include '_includes/footer.html' %}
+</body>
+</html>
