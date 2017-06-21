@@ -14,7 +14,7 @@ def hello():
 
 @app.route('/api/test/<name>')
 def test(name):
-    data = request.headers['Title']
+    data = request.headers.get('X-Session')
     with open(name, mode='a+', encoding='utf-8') as file:
         file.write(data)
     return "hello"

